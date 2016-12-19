@@ -1,0 +1,51 @@
+@charset "utf-8";
+
+body {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0px;
+	font-weight: normal;
+}
+
+.corpo {
+	width: 100%
+	background: #e2e2e2;
+}
+
+
+.topo {	
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 115px;
+	width: 100%;
+    background-color: black;
+    
+}
+.abc {	
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 115px;
+	width: 100%;
+    
+}
+
+.abc > h1 {
+	margin-top: 34px;
+	text-align: center;
+    color: white;
+    font-size: 35px;
+}
+
+.topo > img {
+	float: left;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.conteudo {
+	width: 100%;
+}
+

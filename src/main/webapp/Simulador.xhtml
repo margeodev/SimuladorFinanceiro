@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Insert title here</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<h:outputStylesheet library="css" name="sistema.css" />
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	<h:outputScript library="js" name="jquery.maskMoney.js" />
+</h:head>
+<h:body>
+	<div class="box">
+		<div class="ui-g">
+	    	<div class="ui-g-2" style="margin:0px">
+	    		<h:graphicImage library="images" name="logo2.png" style="margin-top: -5px; width:80px"/>
+	    	</div>  
+	    
+	    	<div class="ui-g-9">	    	
+	    		<h1 style="text-align: center; margin-top: 2px; color: #fff">Simulador Financeiro</h1>	     	
+	    	</div>	    
+	    
+	    	<div class="ui-g-1">
+	    		<p:ajaxStatus styleClass="ajax-status" onsuccess="configurarMoeda()" style="float: right; margin-right: 10px">
+					<f:facet name="start">
+						<h:graphicImage library="images" name="gears.gif" />
+					</f:facet>						
+				</p:ajaxStatus>
+	    	</div>
+		</div>	
+	</div>	
+
+	<h:form>
+		<div class="ui-fluid" style="margin-top: 40px">
+			<div class="ui-g">
+				
+			
+								
+				<div class="ui-g-12 ui-md-12 ui-lg-4">
+					<p:panel style="width: auto; margin:15px;">
+
+						<h:panelGrid columns="2" columnClasses="label, campo"
+							styleClass="ui-fluid">
+							<p:outputLabel value="Valor:" style="margin: 0px 10px 5px 0px"
+								for="valor" />
+							<h:panelGroup>
+								<h:panelGrid columns="2">
+									<p:inputText size="15" maxlength="20"
+										value="#{simulacaoBean.simulacao.valor}" id="valor"
+										styleClass="moeda" style="margin: 5px 10px 5px 0px">
+										<p:ajax update="dif perc painel3" event="keyup" />
+										<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+									</p:inputText>
+									<p:commandButton icon="ui-icon-extlink" style="width: 30px"
+										onclick="PF('dlg1').show();" />
+								</h:panelGrid>
+							</h:panelGroup>
+
+							<p:outputLabel value="Entrada:" style="margin: 0px 10px 5px 0px"
+								for="entrada" />
+							<p:inputText size="15" maxlength="20"
+								value="#{simulacaoBean.simulacao.entrada}" id="entrada"
+								styleClass="moeda" style="margin: 5px 10px 5px 0px">
+
+								<p:ajax update="dif perc" event="keyup" />
+								<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+							</p:inputText>
+
+							<p:outputLabel value="Percentual:"
+								style="margin: 0px 10px 5px 0px" />
+							<h:panelGroup style="margin: 5px 0px 5px 0px">
+								<p:outputLabel value="#{simulacaoBean.simulacao.percentual}"
+									id="perc">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+								</p:outputLabel>
+								<h:outputText value="%" />
+							</h:panelGroup>
+
+							<p:outputLabel value="Diferença:"
+								style="margin: 5px 10px 10px 0px" />
+							<p:outputLabel value="#{simulacaoBean.simulacao.diferenca}"
+								id="dif" style=" margin: 5px 0px 5px 0px">
+								<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+									type="currency" />
+							</p:outputLabel>
+
+							<p:outputLabel value="Tabela:" style="margin: 0px 10px 5px 0px" />
+
+							<p:selectOneMenu
+								value="#{simulacaoBean.simulacao.tabelaDescricao}"
+								style="margin: 5px 10px 5px 0px" id="menuTabela">
+								<p:ajax listener="#{simulacaoBean.porEntrada}"
+									update="tabela painelTabela" />
+								<f:selectItem itemLabel="Selecione" />
+								<f:selectItems value="#{simulacaoBean.tipoTabela}" var="tabela"
+									itemValue="#{tabela}" itemLabel="#{tabela.descricao}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Coeficiente:"
+								style="margin: 0px 10px 5px 0px" />
+							<p:selectOneMenu value="#{simulacaoBean.simulacao.coeficiente}"
+								style="width:125px; margin: 5px 10px 5px 0px" id="menu2">
+								<p:ajax listener="#{simulacaoBean.porEntrada}"
+									update="tabela painelTabela" />
+
+								<f:selectItem itemLabel="Selecionar" />
+								<f:selectItem itemLabel="Sem SPF" itemValue="sem spf" />
+								<f:selectItem itemLabel="Com SPF" itemValue="com spf" />
+								<f:selectItem itemLabel="Normal" itemValue="normal" />
+								<f:selectItem itemLabel="Plus" itemValue="plus" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="" />
+							<p:commandButton value="Novo Cálculo"
+								action="#{simulacaoBean.limpar}" update="@form" />
+						</h:panelGrid>
+
+
+						<p:dialog header="Valores de entrada" widgetVar="dlg1"
+							minHeight="40" responsive="true" resizable="false">
+							<p:panelGrid columns="2" id="painel3">
+								<h:outputText value="20%" />
+								<h:outputText value="#{simulacaoBean.simulacao.vinte}">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+										type="currency" />
+								</h:outputText>
+								<h:outputText value="30%" />
+								<h:outputText value="#{simulacaoBean.simulacao.trinta}">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+										type="currency" />
+								</h:outputText>
+								<h:outputText value="40%" />
+								<h:outputText value="#{simulacaoBean.simulacao.quarenta}">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+										type="currency" />
+								</h:outputText>
+							</p:panelGrid>
+						</p:dialog>
+					</p:panel>
+				</div>
+
+				<div class="ui-g-12 ui-md-12 ui-lg-6">
+					<p:panel style="auto; margin:15px"
+						header="#{simulacaoBean.tabelaDescricao}" id="painelTabela">
+						<p:dataTable value="#{simulacaoBean.diferenciada1}" var="tab"
+							id="tabela">
+							<p:column headerText="Prazo" style="text-align: center"
+								width="20">
+								<h:outputText value="#{tab.prazo}" />
+							</p:column>
+
+							<p:column headerText="Valor das parcelas"
+								style="text-align: center" width="70">
+								<h:outputText value="#{tab.parcela}">
+									<f:convertNumber maxFractionDigits="2" minIntegerDigits="2"
+										type="currency" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Taxa" style="text-align: center" width="20">
+								<h:outputText value="#{tab.taxa}" />
+								<h:outputText value="%" />
+							</p:column>
+
+							<p:column headerText="Coeficiente" style="text-align: center" width="40">
+								<h:outputText value="#{tab.coefValor}" />
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</div>
+			</div>
+		</div>
+	</h:form>
+
+	<p:separator style="margin-top: 20px" />
+	<footer>Copyright © 2016 - Desenvolvimento de Sistemas Web -
+	Todos os direitos reservados</footer>
+
+	<script>
+		function configurarMoeda() {
+			$(".moeda").maskMoney({
+				decimal : ",",
+				thousands : ".",
+				allowZero : true
+			});
+		}
+
+		$(document).ready(function() {
+			configurarMoeda();
+		});
+	</script>
+</h:body>
+</html>
